@@ -1,3 +1,4 @@
+import Link from "next/link";
 import "./header.scss";
 const Header = () => {
   let getInfForHeader = JSON.parse(localStorage.getItem("formInf")!);
@@ -19,7 +20,15 @@ const Header = () => {
           </div>
           <div className="header-right flex-class">
             <img src="./af.svg" alt="Eror" />
-            <h1>{getInfForHeader.name}</h1>
+            <h1>
+              {getInfForHeader ? (
+                getInfForHeader.name
+              ) : (
+                <Link href="/signIn">
+                  <button className="headerSign">Sign In</button>
+                </Link>
+              )}
+            </h1>
             {/* <img src="./user-image.svg" alt="Eror" /> */}
           </div>
         </div>

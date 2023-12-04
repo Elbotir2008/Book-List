@@ -36,6 +36,13 @@ header {
       align-items: center;
       gap: 2rem;
       color: #6200ee;
+      .headerSign {
+        border-radius: 0.5rem;
+        background-color: #6200ee;
+        border: 1px solid #6200ee;
+        color: #fff;
+        padding: 1rem 3rem;
+      }
       img {
         cursor: pointer;
       }

@@ -1,7 +1,7 @@
 "use client";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import "./signIn.scss";
@@ -17,7 +17,7 @@ const validationSchema = Yup.object().shape({
 
 const Page = () => {
   const [serverError, setServerError] = useState("");
-  const [submited, setSubmited] = useState(false);
+  const [submited, setSubmited] = useState<any>(false);
 
   let getFormInf = JSON.parse(localStorage.getItem("formInf")!);
 
@@ -30,14 +30,18 @@ const Page = () => {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      let inputValues = values;
       try {
         if (
           getFormInf.name == values.name &&
           getFormInf.email == values.email &&
           getFormInf.username == values.username
         ) {
-          setSubmited(true);
-          toast.success("You have successfully");
+          if (toast.success("You have successfully")) {
+            setSubmited(true);
+          } else {
+            setSubmited(false);
+          }
         } else {
           toast.error("Your information in the registry did not match");
         }
@@ -47,11 +51,31 @@ const Page = () => {
     },
   });
 
+  // const handleInputChange = () => {
+  //   if (
+  //     getFormInf.name == inputValues.name &&
+  //     getFormInf.email == inputValues.email &&
+  //     getFormInf.username == inputValues.username
+  //   ) {
+  //     setSubmited(true);
+  //   } else {
+  //     console.log("false");
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   handleInputChange();
+  // }, []);
+
+  const handleDelete = () => {
+    localStorage.removeItem("formInf");
+  };
+
   return (
     <div className="signUp">
-      <div className="signUp-box">
+      <div className="signUp-box" style={submited ? { height: "50rem" } : null}>
         <h1>Sign In</h1>
-        <form onSubmit={formik.handleSubmit}>
+        <form>
           <div className="input1 input">
             <h4>Your Name</h4>
             <input
@@ -59,6 +83,7 @@ const Page = () => {
               id="name"
               placeholder="Enter Your Name"
               {...formik.getFieldProps("name")}
+              // onChange={(e) => setInputsValues({ name: e.target.value })}
             />
             {formik.touched.name && formik.errors.name ? (
               <div className="error">{formik.errors.name}</div>
@@ -71,6 +96,7 @@ const Page = () => {
               id="email"
               placeholder="Enter Your Email"
               {...formik.getFieldProps("email")}
+              // onChange={(e) => setInputsValues({ email: e.target.value })}
             />
             {formik.touched.email && formik.errors.email ? (
               <div className="error">{formik.errors.email}</div>
@@ -83,6 +109,7 @@ const Page = () => {
               id="username"
               placeholder="Enter Your Username"
               {...formik.getFieldProps("username")}
+              // onChange={(e) => setInputsValues({ username: e.target.value })}
             />
             {formik.touched.username && formik.errors.username ? (
               <div className="error">{formik.errors.username}</div>
@@ -95,21 +122,36 @@ const Page = () => {
               id="password"
               placeholder="Enter Your Password"
               {...formik.getFieldProps("password")}
+              // onChange={(e) => setInputsValues({ password: e.target.value })}
             />
             {formik.touched.password && formik.errors.password ? (
               <div className="error">{formik.errors.password}</div>
             ) : null}
           </div>
           {serverError && <div className="error">{serverError}</div>}
-          <Link href="/bookList">
-            <button type="submit" className="signUp-submit">
+          <Link href={submited ? "/bookList" : " "}>
+            <button
+              type="submit"
+              className="signUp-submit"
+              onClick={formik.handleSubmit}
+            >
               Submit
             </button>
           </Link>
         </form>
         <p>
-          Already signed up? <Link href="/">Go to sign up.</Link>
+          Already signed up?{" "}
+          <Link href="/" onClick={handleDelete}>
+            Go to sign up.
+          </Link>
         </p>
+        {submited ? (
+          <Link href="/bookList">
+            <button style={submited ? { marginTop: "2rem" } : null}>
+              Go to the HomePage
+            </button>
+          </Link>
+        ) : null}
       </div>
     </div>
   );

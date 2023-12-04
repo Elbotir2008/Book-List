@@ -30,16 +30,19 @@ const SignUp = () => {
   makeid(5);
 
   const handleSubmit = async (values: any) => {
-    let setLocalge = localStorage.setItem("formInf", JSON.stringify(values));
+    localStorage.setItem("formInf", JSON.stringify(values));
     console.log(values);
     try {
       let res = await axios.post("https://0001.uz/signup", values);
       let data = await res.data;
       console.log(res);
+      toast.success(
+        "You have successfully registered and you have to go to the Sign In"
+      );
     } catch (error) {
       console.log(error);
     }
-    toast.success("You have successfully registered!");
+    // location.reload();
   };
   return (
     <div className="signUp">

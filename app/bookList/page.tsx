@@ -5,6 +5,7 @@ import Header from "../components/header/Header";
 import { useEffect, useState } from "react";
 import "./bookList.scss";
 import axios from "axios";
+import md5 from "md5";
 
 const Page = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -40,19 +41,23 @@ const Page = () => {
       closeModal();
     },
   });
+  let dataBooks = { isbn: "9781118464465" };
+  let replaceMd = md5(`https://0001.uz/books${dataBooks}MJoPe`);
+  console.log(replaceMd);
 
-  const fetchBooks = async () => {
-    try {
-      let res = await axios.get("https:/0001.uz/books");
-      let data = await res.data;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const fetchBooks = async () => {
+  //   try {
+  //     let res = await axios.get("https:/0001.uz/books");
+  //     let data = await res.data;
+  //     console.log(data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchBooks();
-  }, []);
+  // useEffect(() => {
+  //   fetchBooks();
+  // }, []);
 
   return (
     <div>
